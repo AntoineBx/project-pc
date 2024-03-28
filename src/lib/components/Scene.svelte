@@ -5,6 +5,7 @@
 
 </script>
 
+
 <T.PerspectiveCamera
   makeDefault
   position={[70, 30, 0]}
@@ -25,13 +26,15 @@
   files="envmap.hdr"
   isBackground={false}
   format="hdr"
+  groundProjection={{ radius: 200, height: 5, scale: { x: 100, y: 100, z: 100 } }}
 />
-<TransformControls>
-<T.DirectionalLight
-  position={[50, 32, 40]}
-  castShadow
-/>
-</TransformControls>
+<!-- <TransformControls on:change={(e)=>{
+  console.log(e.target._positionStart)
+}}>
+  <T.DirectionalLight
+    position={[30, 22, 0]} 
+  />
+</TransformControls> -->
 <Grid
   position.y={-0.001}
   cellColor="#ffffff"
@@ -68,16 +71,3 @@
   <Lumen64Final />
   <T.MeshStandardMaterial color="#F85122" />
 </T.Mesh>
-
-<Float
-  floatIntensity={1}
-  floatingRange={[0, 1]}
->
-  <T.Mesh
-    position={[-1.4, 1.5, 0.75]}
-    rotation={[-5, 128, 10]}
-  >
-    <T.IcosahedronGeometry />
-    <T.MeshStandardMaterial color="#F8EBCE" />
-  </T.Mesh>
-</Float>

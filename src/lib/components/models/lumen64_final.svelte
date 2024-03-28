@@ -7,6 +7,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
   import { Group } from 'three'
   import { T, forwardEventHandlers } from '@threlte/core'
   import { useGltf, useGltfAnimations } from '@threlte/extras'
+  import FrontControlPanel from '$lib/components/models/FrontControlPanel.svelte';
 	import { onMount } from 'svelte';
 
   export const ref = new Group()
@@ -44,17 +45,28 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
 
     onMount(() => {
       let actionsBool = false;
+       //launch every animation 
       document.addEventListener('keydown', (e) => {
+        const animationNotToStart = [
+          'switchStickAction' 
+        ]
         if (e.key === 'a') {
           actionsBool = !actionsBool
-            
-            for (const action in $actions) {
+          console.log($actions)
+            const tempActions = Object.keys($actions)
+            animationNotToStart.forEach((actionToBan) => {
+              tempActions.splice(tempActions.indexOf(actionToBan), 1)
+            })
+            tempActions.forEach(action => {
               if(actionsBool){
-                $actions[action].play()
+                $actions[action].paused = false
+                $actions[action]?.play()
+                $actions[action]?.fadeIn(2)
+                
               }else{
-                $actions[action].stop()
+                $actions[action]?.halt(2)
               }
-            }
+            });
         }
       })
     })
@@ -67,6 +79,8 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
     <slot name="fallback" />
   {:then gltf}
     <T.Group name="Scene">
+
+      <FrontControlPanel {gltf} />
       <T.Mesh
         name="bottom_base001"
         castShadow
@@ -549,24 +563,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
         position={[16.42, 4.1, -7.18]}
         rotation={[Math.PI / 2, 0, -Math.PI]}
       />
-      <T.Mesh
-        name="switchStick"
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.switchStick.geometry}
-        material={gltf.materials.panel_and_bottom_details}
-        position={[16.9, 4.41, 4.36]}
-        rotation={[0, 0, -2.04]}
-      />
-      <T.Mesh
-        name="switchBase"
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.switchBase.geometry}
-        material={gltf.materials.panel_and_bottom_details}
-        position={[17.16, 4.64, 4.36]}
-        rotation={[0, 0, -0.93]}
-      />
+      
       <T.Mesh
         name="ram_base002"
         castShadow
