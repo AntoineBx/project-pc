@@ -1,18 +1,18 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { ContactShadows, Float, Grid, OrbitControls,Sky ,TransformControls , Environment, AudioListener, PositionalAudio, Audio, useThrelteAudio } from '@threlte/extras'
+  import { ContactShadows, Float, Grid, OrbitControls,Sky ,TransformControls , Environment, AudioListener } from '@threlte/extras'
   import Lumen64Final from './models/lumen64_final.svelte'
 	import { onMount } from 'svelte';
   import { finished } from '$lib/stores/loader'
   import { PosiAudioArray } from '$lib/stores/audioArrayStore';
-	import { lerp } from 'three/src/math/MathUtils.js';
+	import { lerp, mapLinear } from 'three/src/math/MathUtils.js';
   import * as THREE from 'three';
   const lerpValue = 0.02
   const lookAt = [0,10,0]
   const cameraPos = [40, 15, 0]
   const fov = 40
-  const reduceX = 0.01
-  const reduceY = 0.01
+  const angleRangeMultiplierX = 5
+  const angleRangeMultiplierY = 6
   let camera: THREE.PerspectiveCamera
   let MESH: THREE.Mesh
 
@@ -22,25 +22,21 @@
   let LookAtPreviousTask = {x:0,y:0,z:0};
 
   onMount(()=>{
-    document.addEventListener( 'mousemove', onDocumentMouseMove )
+    document.addEventListener( 'mousemove', onDocumentMouseMove)
+    document.addEventListener('touchmove', onDocumentTouchMove )
     window.addEventListener('resize',()=> {
-      console.log('resize')
       windowHalfX = window.innerWidth / 2;
       windowHalfY = window.innerHeight / 2;
     })
   })
 
   $:if($finished){
-    console.log('finished')
-    setTimeout(() => {
-      initAudio()
-    }, 4000);
+
   }
   PosiAudioArray.subscribe((value) => {
     // console.log("scene ARRAY UPDATE",value)
     value.forEach((audio)=>{
       if(audio instanceof THREE.PositionalAudio){
-        console.log("posiAudio",audio)
         // const audioLoader = new THREE.AudioLoader();
         // audioLoader.load( '/audio/mechanicalWheel.mp3', function( buffer ) {
         //   audio.setBuffer( buffer );
@@ -53,29 +49,27 @@
     })
   })  
   
+
+
+  function onDocumentTouchMove( event: TouchEvent) {
+    event.preventDefault();
+    mouseX = mapLinear(event.touches[0].clientX - windowHalfX ,-windowHalfX,windowHalfX,-1,1);
+    mouseY = mapLinear( event.touches[0].clientY - windowHalfY, -windowHalfY, windowHalfY,-1,1);
   
-  function initAudio(){
-    const listener = new THREE.AudioListener();
-    camera.add( listener );
-    //posiAudio.play()
-
-    
-    
-
   }
-
-
-
   function onDocumentMouseMove( event: MouseEvent) {
-    mouseX = ( event.clientX - windowHalfX );
-    mouseY = ( event.clientY - windowHalfY );
+    if(matchMedia('(hover: none)').matches){
+      return
+    }
+    mouseX = mapLinear( event.clientX - windowHalfX ,-windowHalfX,windowHalfX,-1,1);
+    mouseY = mapLinear( event.clientY - windowHalfY, -windowHalfY, windowHalfY,-1,1);
   }
 
   useTask((delta) => {
     LookAtPreviousTask = {
       x:lookAt[0],
-      y:lerp(LookAtPreviousTask.y,lookAt[1] -mouseY*reduceY, lerpValue),
-      z:lerp(LookAtPreviousTask.z,lookAt[2] -mouseX*reduceX, lerpValue),
+      y:lerp(LookAtPreviousTask.y,lookAt[1] -mouseY*angleRangeMultiplierY, lerpValue),
+      z:lerp(LookAtPreviousTask.z,lookAt[2] -mouseX*angleRangeMultiplierX, lerpValue),
     }
     camera.lookAt( LookAtPreviousTask.x, LookAtPreviousTask.y, LookAtPreviousTask.z );
     MESH.position.x = LookAtPreviousTask.x
@@ -95,13 +89,13 @@
   }}
   fov={fov}
 >
-  <OrbitControls
+  <!-- <OrbitControls
     enableZoom={true}
     enableDamping
     
     target={[5, 7, 0]}
-  />
-  <AudioListener name="testAUdioListener"/>
+  /> -->
+  <AudioListener name="mainAudioListener"/>
 </T.PerspectiveCamera>
 
 

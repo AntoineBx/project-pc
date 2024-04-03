@@ -24,16 +24,15 @@
 	let posiAudio: THREE.PositionalAudio;
     let playing = false
     let loadInStore = () => {
-        console.log("LALAL")
         PosiAudioArray.update((value) => {
             value.push(posiAudio);
             return value;
 	    });
        //ADD HELPER
-        playing = true
-        const helper = new PositionalAudioHelper( posiAudio, 23 );
-        refGroup.add( posiAudio );
-        posiAudio.add( helper );
+        // playing = true
+        // const helper = new PositionalAudioHelper( posiAudio, 23 );
+        // refGroup.add( posiAudio );
+        // posiAudio.add( helper );
             
     };
     

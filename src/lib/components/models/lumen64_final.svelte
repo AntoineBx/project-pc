@@ -12,6 +12,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
 	import Screen from '$lib/components/models/screen/Screen.svelte';
 	import { onMount } from 'svelte';
 	import PosiAudio from './utils/posiAudio.svelte';
+  import { alphaFix, metalFix, roughnessFix, zIndexFix } from './utils/materialFix';
 
   
 	export const ref = new Group();
@@ -32,29 +33,11 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
   }
   
 	gltf.then((model) => {
-		function alphaFix(material) {
-			material.depthWrite = true;
-			material.depthTest = true;
-			material.opacity = 1;
-			material.alphaToCoverage = true;
-			material.blending = 0;
-			console.log(material);
-		}
-		function metalFix(material) {
-			material.metalness = 0.8;
-			material.roughness = 0.5;
-		}
-		function roughnessFix(material) {
-			material.roughness = 0;
-		}
-		function zIndexFix(material) {
-			material.depthWrite = true;
-			material.depthTest = true;
-		}
 		zIndexFix(model.materials.cable_bolt_canvas);
 		alphaFix(model.materials.glass);
-		metalFix(model.materials.big_details);
+		//metalFix(model.materials.big_details);
 		roughnessFix(model.materials.panel_and_bottom_details);
+    metalFix(model.materials.main_panel_plate001);
 	});
 
 	onMount(() => {
