@@ -10,7 +10,7 @@
   const lerpValue = 0.02
   const lookAt = [0,10,0]
   const cameraPos = [40, 15, 0]
-  const fov = 40
+  const fov = 20
   const angleRangeMultiplierX = 5
   const angleRangeMultiplierY = 6
   let camera: THREE.PerspectiveCamera
@@ -89,12 +89,12 @@
   }}
   fov={fov}
 >
-  <!-- <OrbitControls
+  <OrbitControls
     enableZoom={true}
     enableDamping
     
     target={[5, 7, 0]}
-  /> -->
+  />
   <AudioListener name="mainAudioListener"/>
 </T.PerspectiveCamera>
 

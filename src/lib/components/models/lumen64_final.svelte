@@ -33,11 +33,12 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
   }
   
 	gltf.then((model) => {
+    console.log(model)
 		zIndexFix(model.materials.cable_bolt_canvas);
 		alphaFix(model.materials.glass);
-		//metalFix(model.materials.big_details);
+		metalFix(model.materials.big_details);
 		roughnessFix(model.materials.panel_and_bottom_details);
-    metalFix(model.materials.main_panel_plate001);
+   
 	});
 
 	onMount(() => {
