@@ -4,8 +4,8 @@
 	import { tweened } from 'svelte/motion';
   import { fade } from 'svelte/transition'
   import { progressStore } from '$lib/stores/loader'
-
-
+  import { Theatre,Studio } from '@threlte/theatre'
+  import { dev } from '$app/environment'
   const tweenedProgress = tweened($progressStore, {
     duration: 800
   })
@@ -30,9 +30,12 @@
   </div>
 {/if}
 <div class="main">
-  <Canvas>
-    <Scene />
-  </Canvas>
+  <Studio enabled={dev} />
+  <Theatre>
+    <Canvas>
+      <Scene />
+    </Canvas>
+  </Theatre>
 </div>
 
 

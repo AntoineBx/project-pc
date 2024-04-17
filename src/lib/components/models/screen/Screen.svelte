@@ -3,9 +3,11 @@
  import { Flex, Box, tailwindParser } from '@threlte/flex'
  import Plane from './Plane.svelte'
 	import { Text } from '@threlte/extras';
+	import Label from './Label.svelte';
 
 </script>
   <T.Group position={[14.4,13.5,0.1]} rotation={[0,Math.PI /2,0]} >
+    
     <Plane
       width={15.85}
       height={10}
@@ -15,7 +17,7 @@
     <Flex
       width={15.85}
       height={10}
-      padding={0.4}
+      padding={1}
       classParser={tailwindParser}
       let:width
       let:height
@@ -24,16 +26,21 @@
         width="auto"
         height="auto"
         flex={1}
-        padding={4}
+        padding={2}
         >
         <Plane
           {width}
           {height}
-          color="red"
-          depth={2}
-          radius={1}
+          color="green"
+          depth={1.5}
+          radius={0.5}
         />
-        
+        <Label
+          text="TESTINGGGG"
+          fontSize="xs"
+          color="white"
+          z={0.3}>
+        </Label>
       </Box>
       <!-- <T.Mesh>
         <RoundedBoxGeometry

@@ -29,10 +29,23 @@ npm run dev -- --open
 
 To create a production version of your app:
 
-```bash
+
+
+## MAKE CHANGE
+
 npm run build
-```
 
-You can preview the production build with `npm run preview`.
+docker image rm registry.gitlab.com/headam/portfolio/pc-project
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+docker build . -t registry.gitlab.com/headam/portfolio/pc-project
+
+docker push registry.gitlab.com/headam/portfolio/pc-project
+
+
+## ON SSH
+
+docker compose down -v
+
+docker image rm registry.gitlab.com/headam/portfolio/pc-project:latest
+
+docker compose up

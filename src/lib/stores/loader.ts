@@ -10,5 +10,6 @@ export const progressStore = derived(
 );
 export const finished = derived(
 	finishedOnce,
-	($finishedOnce) => { return $finishedOnce}
+	($finishedOnce) => { 
+		return $finishedOnce}
 );

@@ -12,7 +12,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
 	import Screen from '$lib/components/models/screen/Screen.svelte';
 	import { onMount } from 'svelte';
 	import PosiAudio from './utils/posiAudio.svelte';
-  import { alphaFix, metalFix, roughnessFix, zIndexFix } from './utils/materialFix';
+  import { computerMeshFixer } from './utils/materialFix';
 
   
 	export const ref = new Group();
@@ -26,19 +26,12 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
 
   $:if($finished){
     console.log('finished')
-    setTimeout(() => {
       toggleAnimation();
-    }, 1000);
     
   }
   
 	gltf.then((model) => {
-    console.log(model)
-		zIndexFix(model.materials.cable_bolt_canvas);
-		alphaFix(model.materials.glass);
-		metalFix(model.materials.big_details);
-		roughnessFix(model.materials.panel_and_bottom_details);
-   
+		computerMeshFixer(model);
 	});
 
 	onMount(() => {
@@ -47,6 +40,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
 		document.addEventListener('keydown', (e) => {
 			if (e.key === 'a') {
 				toggleAnimation();
+				console.log(gltf)
 			}
 		});
 	});
@@ -533,7 +527,7 @@ Command: npx @threlte/gltf@2.0.3 static/models/lumen64_final.glb --shadows --tra
 				/>
 				<PosiAudio 
 					rotation={[0, Math.PI/2, 0]} 
-					source="/audio/mechanicalWheel.mp3"
+					source="audio/mechanicalWheel.mp3"
 					directionalCone={{
 						coneInnerAngle: 180,
 						coneOuterAngle: 200,
